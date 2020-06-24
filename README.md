@@ -1,5 +1,5 @@
-# Stack
 [![Build Status](https://travis-ci.org/amarflybot/demo-test-container.svg?branch=master)](https://travis-ci.org/amarflybot/demo-test-container)
+
 # Getting Started
 
 ### Reference Documentation
