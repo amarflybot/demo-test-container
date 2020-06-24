@@ -1,9 +1,6 @@
 package com.example.demotestcontainer;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +9,9 @@ import java.io.Serializable;
 
 @Entity
 @Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @RequiredArgsConstructor
 public class Person implements Serializable {
 

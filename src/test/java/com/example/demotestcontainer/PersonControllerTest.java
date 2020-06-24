@@ -8,6 +8,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,6 +23,7 @@ import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.util.Arrays;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.data.redis.connection.ReactiveStreamCommands.AddStreamRecord.body;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
@@ -38,6 +41,9 @@ class PersonControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private CacheManager cacheManager;
 
     @Autowired
     private EntityManager entityManager;
@@ -118,6 +124,12 @@ class PersonControllerTest {
         queryEntityLoadCount = statistics.getEntityLoadCount();
         Assertions.assertEquals(2, queryEntityLoadCount);
         log.info("queryEntityLoadCount After third api hit: {}", queryEntityLoadCount);
+        final Cache.ValueWrapper personCache = cacheManager.getCache("personCache").get(1);
+        Person person = (Person) personCache.get();
+        assertEquals(Person.builder().id(1L).name("Amar").build(), person);
 
+        final Cache.ValueWrapper personCache2 = cacheManager.getCache("personCache").get(2);
+        Person person2 = (Person) personCache2.get();
+        assertEquals(Person.builder().id(2L).name("Amit").build(), person2);
     }
 }
